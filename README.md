@@ -62,6 +62,12 @@ kubectl get pods/nginx -n testapps
 ```bash
 vi .env
 ```
+```bash
+_VERSION=0.0.0
+_NAMESPACE=testapps
+_DEPLOYMENT_NAME=nginx
+```
+
 #### Dockerfile
 __The Dockerfile is a sample, so feel free to modify it as you like.__
 
