@@ -15,4 +15,4 @@ aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --usern
   --server=$KUBERNETES_SERVER \
   --certificate-authority=cert.crt \
   --token=$KUBERNETES_TOKEN \
-  set image deployment/${DEPLOYMENT_NAME} -n ${ECR_IMAGE_NAME} ${ECR_IMAGE_NAME}=${REPOSITORY_URL}:${_VERSION}
+  set image deployment/${DEPLOYMENT_NAME} -n ${DEPLOYMENT_NAME} ${ECR_IMAGE_NAME}=${REPOSITORY_URL}:${_VERSION}
