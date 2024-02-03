@@ -30,7 +30,6 @@ Projects > Project Settings > Environment Variables
 | AWS_ACCOUNT_ID|AWS Account ID|
 | AWS_DEFAULT_REGION |region of ECR|
 | AWS_SECRET_ACCESS_KEY |AWS API key|
-| DEPLOYMENT_NAME |deployement namespace of kubernetes. example. testapps|
 | ECR_IMAGE_NAME |repository name of ECR|
 | KUBERNETES_TOKEN |$TOKEN of serviceaccount of kubernetes|
 | KUBERNETES_SERVER | What you obtained earlier as $KUBERNETES_SERVER (value of server: listed in ~/.kube/config)|
