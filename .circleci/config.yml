@@ -1,0 +1,73 @@
+version: '2.1'
+orbs:
+  aws-cli: circleci/aws-cli@4.1.2
+
+jobs:
+  build:
+    working_directory: ~/app
+    docker: 
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - setup_remote_docker
+      - aws-cli/install
+      - aws-cli/setup
+      - run:
+          name: docker build
+          command: |
+            source ~/app/.env
+            docker build -t ${ECR_IMAGE_NAME}:${_VERSION} ~/app/docker
+            status=$(echo "$?")
+            if [ "${status}" != "0" ]; then
+              exit 1
+            else
+              RESISTRY_URL=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+              REPOSITORY_URL=${RESISTRY_URL}/${ECR_IMAGE_NAME}
+              aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin $RESISTRY_URL
+              #docker tag ${ECR_IMAGE_NAME}:${_VERSION} ${REPOSITORY_URL}:${_VERSION}
+              docker tag docker.io/library/${ECR_IMAGE_NAME}:${_VERSION} ${REPOSITORY_URL}:${_VERSION}
+              docker push ${REPOSITORY_URL}:${_VERSION}
+            fi
+            exit 0
+
+  deploy:
+    docker:
+      #- image: circleci/buildpack-deps:bullseye
+      - image: cimg/python:3.9
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+          name: Install envsubst
+          command: |
+            sudo apt-get update && sudo apt-get -y install gettext-base
+      - run:
+          name: Install awscli
+          command: |
+             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+             unzip awscliv2.zip
+             sudo ./aws/install
+      - run:
+          name: Install kubectl
+          command: |
+            curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+            chmod u+x ./kubectl
+      - run:
+          name: Deploy Code
+          command: ./scripts/ci-deploy.sh
+
+
+workflows:
+  version: 2
+  build-deploy-master:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
