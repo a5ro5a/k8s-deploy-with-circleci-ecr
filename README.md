@@ -88,7 +88,7 @@ You can also check the file by logging into the pod.
 kubectl exec -it pods/nginx-xxxxxx -n testapps -- cat /usr/share/nginx/html/test.html
 ```
 
-### delete samaple app
+### delete sample app
 ```bash
 kubectl delete namespace testapps
 ```
