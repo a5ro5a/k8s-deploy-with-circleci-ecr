@@ -21,9 +21,9 @@ jobs:
             if [ "${status}" != "0" ]; then
               exit 1
             else
-              RESISTRY_URL=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
-              REPOSITORY_URL=${RESISTRY_URL}/${ECR_IMAGE_NAME}
-              aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin $RESISTRY_URL
+              REGISTRY_URL=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+              REPOSITORY_URL=${REGISTRY_URL}/${ECR_IMAGE_NAME}
+              aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin $REGISTRY_URL
               #docker tag ${ECR_IMAGE_NAME}:${_VERSION} ${REPOSITORY_URL}:${_VERSION}
               docker tag docker.io/library/${ECR_IMAGE_NAME}:${_VERSION} ${REPOSITORY_URL}:${_VERSION}
               docker push ${REPOSITORY_URL}:${_VERSION}

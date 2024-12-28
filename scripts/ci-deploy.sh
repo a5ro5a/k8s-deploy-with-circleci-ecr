@@ -5,10 +5,10 @@ source ~/app/.env
 
 echo "$KUBERNETES_CLUSTER_CERTIFICATE" | base64 --decode > cert.crt
 
-RESISTRY_URL=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
-REPOSITORY_URL=${RESISTRY_URL}/${ECR_IMAGE_NAME}
+REGISTRY_URL=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+REPOSITORY_URL=${REGISTRY_URL}/${ECR_IMAGE_NAME}
 
-aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin $RESISTRY_URL
+aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin $REGISTRY_URL
 
 ./kubectl \
   --kubeconfig=/dev/null \
